@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Request a Meeting – Pinnacle Attainment</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6f9; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .wrap { width: 100%; max-width: 560px; }
+  .logo-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+  .brand-name { font-size: 17px; font-weight: 600; color: #1a2e4a; letter-spacing: 0.04em; }
+  .brand-tag { font-size: 12px; color: #6b7280; margin-top: 3px; }
+  .lang-btn { font-size: 12px; font-weight: 500; border: 1px solid #d1d5db; border-radius: 6px; padding: 5px 12px; cursor: pointer; background: #fff; color: #6b7280; transition: background 0.15s; }
+  .lang-btn:hover { background: #f9fafb; }
+  .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .card-title { font-size: 16px; font-weight: 600; color: #1a2e4a; margin-bottom: 1.25rem; }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 13px; color: #374151; margin-bottom: 5px; font-weight: 500; }
+  .field input, .field select, .field textarea { width: 100%; border: 1px solid #d1d5db; border-radius: 7px; padding: 9px 11px; font-size: 14px; background: #fff; color: #111827; font-family: inherit; outline: none; transition: border 0.15s; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a2e4a; }
+  .field textarea { resize: vertical; min-height: 76px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .submit-btn { width: 100%; margin-top: 1.25rem; padding: 11px; font-size: 14px; font-weight: 600; background: #1a2e4a; color: #c9a84c; border: none; border-radius: 7px; cursor: pointer; transition: opacity 0.15s; font-family: inherit; letter-spacing: 0.02em; }
+  .submit-btn:hover { opacity: 0.88; }
+  .confirm { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 2.25rem 1.75rem; text-align: center; display: none; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .confirm-icon { font-size: 2.5rem; margin-bottom: 1rem; color: #1a2e4a; }
+  .confirm-title { font-size: 16px; font-weight: 600; color: #1a2e4a; margin-bottom: 0.5rem; }
+  .confirm-sub { font-size: 13px; color: #6b7280; line-height: 1.6; }
+  .confirm-summary { margin-top: 1.25rem; background: #f9fafb; border-radius: 8px; padding: 1rem; text-align: left; }
+  .summary-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; border-bottom: 1px solid #f3f4f6; }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-label { color: #6b7280; }
+  .summary-val { color: #111827; font-weight: 500; }
+  .new-btn { margin-top: 1.25rem; font-size: 13px; color: #6b7280; background: none; border: 1px solid #d1d5db; border-radius: 7px; padding: 7px 16px; cursor: pointer; font-family: inherit; }
+  .new-btn:hover { background: #f9fafb; }
+  @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo-bar">
+    <div>
+      <div class="brand-name">PINNACLE ATTAINMENT</div>
+      <div class="brand-tag" id="tagline">Strategic Consulting & Organizational Development</div>
+    </div>
+    <button class="lang-btn" id="langToggle" onclick="toggleLang()">ES</button>
+  </div>
+
+  <div class="card" id="formCard">
+    <p class="card-title" id="formTitle">Request a meeting</p>
+    <div class="field">
+      <label id="lbl-name">Full name</label>
+      <input type="text" id="f-name" placeholder="Jane Doe">
+    </div>
+    <div class="field">
+      <label id="lbl-email">Email address</label>
+      <input type="email" id="f-email" placeholder="jane@company.com">
+    </div>
+    <div class="field">
+      <label id="lbl-org">Organization</label>
+      <input type="text" id="f-org" placeholder="Company / Agency">
+    </div>
+    <div class="field">
+      <label id="lbl-type">Meeting type</label>
+      <select id="f-type"></select>
+    </div>
+    <div class="two-col">
+      <div class="field">
+        <label id="lbl-date">Date</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="field">
+        <label id="lbl-time">Time</label>
+        <select id="f-time"></select>
+      </div>
+    </div>
+    <div class="field">
+      <label id="lbl-msg">Message <span style="color:#9ca3af;font-size:11px" id="opt-label">(optional)</span></label>
+      <textarea id="f-msg" placeholder="Brief purpose or context..."></textarea>
+    </div>
+    <button class="submit-btn" id="submitBtn" onclick="submitForm()">Send request →</button>
+  </div>
+
+  <div class="confirm" id="confirmCard">
+    <div class="confirm-icon">✓</div>
+    <p class="confirm-title" id="conf-title">Your request has been received</p>
+    <p class="confirm-sub" id="conf-sub">David will confirm your meeting within 24 hours.</p>
+    <div class="confirm-summary" id="conf-summary"></div>
+    <button class="new-btn" id="newBtn" onclick="resetForm()">Submit another request</button>
+  </div>
+</div>
+
+<script>
+const T = {
+  en: {
+    tag:'Strategic Consulting & Organizational Development',
+    formTitle:'Request a meeting',
+    name:'Full name', email:'Email address', org:'Organization',
+    type:'Meeting type', date:'Date', time:'Time', msg:'Message', opt:'(optional)',
+    types:['Initial consultation','Project review','Strategy session','Advisory services','Other'],
+    submit:'Send request →',
+    confTitle:'Your request has been received',
+    confSub:'David will confirm your meeting within 24 hours.',
+    newBtn:'Submit another request',
+    summaryLabels:['Name','Email','Organization','Type','Date','Time'],
+    langSwitch:'ES', namePh:'Jane Doe', emailPh:'jane@company.com',
+    orgPh:'Company / Agency', msgPh:'Brief purpose or context...'
+  },
+  es: {
+    tag:'Consultoría Estratégica y Desarrollo Organizacional',
+    formTitle:'Solicita una reunión',
+    name:'Nombre completo', email:'Correo electrónico', org:'Organización',
+    type:'Tipo de reunión', date:'Fecha', time:'Hora', msg:'Mensaje', opt:'(opcional)',
+    types:['Consulta inicial','Revisión de proyecto','Sesión estratégica','Servicios de asesoría','Otro'],
+    submit:'Enviar solicitud →',
+    confTitle:'Tu solicitud fue recibida',
+    confSub:'David confirmará tu reunión en un plazo de 24 horas.',
+    newBtn:'Enviar otra solicitud',
+    summaryLabels:['Nombre','Correo','Organización','Tipo','Fecha','Hora'],
+    langSwitch:'EN', namePh:'Juan García', emailPh:'juan@empresa.com',
+    orgPh:'Empresa / Agencia', msgPh:'Propósito o contexto breve...'
+  }
+};
+
+let lang = 'en';
+
+function buildTimeOptions() {
+  const sel = document.getElementById('f-time');
+  sel.innerHTML = '';
+  for (let h = 8; h <= 17; h++) {
+    ['00','30'].forEach(m => {
+      if (h === 17 && m === '30') return;
+      const hd = h > 12 ? h-12 : h === 0 ? 12 : h;
+      const label = `${hd}:${m} ${h < 12 ? 'AM' : 'PM'}`;
+      const o = document.createElement('option');
+      o.value = `${String(h).padStart(2,'0')}:${m}`;
+      o.textContent = label;
+      sel.appendChild(o);
+    });
+  }
+}
+
+function setLang(l) {
+  const t = T[l];
+  document.getElementById('tagline').textContent = t.tag;
+  document.getElementById('formTitle').textContent = t.formTitle;
+  document.getElementById('lbl-name').textContent = t.name;
+  document.getElementById('lbl-email').textContent = t.email;
+  document.getElementById('lbl-org').textContent = t.org;
+  document.getElementById('lbl-type').textContent = t.type;
+  document.getElementById('lbl-date').textContent = t.date;
+  document.getElementById('lbl-time').textContent = t.time;
+  document.getElementById('lbl-msg').childNodes[0].textContent = t.msg + ' ';
+  document.getElementById('opt-label').textContent = t.opt;
+  document.getElementById('submitBtn').textContent = t.submit;
+  document.getElementById('conf-title').textContent = t.confTitle;
+  document.getElementById('conf-sub').textContent = t.confSub;
+  document.getElementById('newBtn').textContent = t.newBtn;
+  document.getElementById('langToggle').textContent = t.langSwitch;
+  document.getElementById('f-name').placeholder = t.namePh;
+  document.getElementById('f-email').placeholder = t.emailPh;
+  document.getElementById('f-org').placeholder = t.orgPh;
+  document.getElementById('f-msg').placeholder = t.msgPh;
+  const sel = document.getElementById('f-type');
+  const cur = sel.selectedIndex;
+  sel.innerHTML = '';
+  t.types.forEach(tp => { const o = document.createElement('option'); o.textContent = tp; sel.appendChild(o); });
+  sel.selectedIndex = Math.min(cur, t.types.length-1);
+}
+
+function toggleLang() { lang = lang==='en'?'es':'en'; setLang(lang); }
+
+function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if (!name || !email) { alert(lang==='en'?'Please enter your name and email.':'Por favor ingresa tu nombre y correo.'); return; }
+  const t = T[lang];
+  const labels = t.summaryLabels;
+  const rows = [
+    [labels[0], name],
+    [labels[1], email],
+    [labels[2], document.getElementById('f-org').value || '—'],
+    [labels[3], document.getElementById('f-type').options[document.getElementById('f-type').selectedIndex].text],
+    [labels[4], document.getElementById('f-date').value || '—'],
+    [labels[5], document.getElementById('f-time').value || '—']
+  ];
+  document.getElementById('conf-title').textContent = t.confTitle;
+  document.getElementById('conf-sub').textContent = t.confSub;
+  document.getElementById('conf-summary').innerHTML = rows.map(r =>
+    `<div class="summary-row"><span class="summary-label">${r[0]}</span><span class="summary-val">${r[1]}</span></div>`
+  ).join('');
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('confirmCard').style.display = 'block';
+}
+
+function resetForm() {
+  document.getElementById('formCard').style.display = 'block';
+  document.getElementById('confirmCard').style.display = 'none';
+  ['f-name','f-email','f-org','f-msg','f-date'].forEach(id => document.getElementById(id).value = '');
+}
+
+buildTimeOptions();
+setLang('en');
+document.getElementById('f-date').setAttribute('min', new Date().toISOString().split('T')[0]);
+</script>
+</body>
+</html>
